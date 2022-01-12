@@ -1,4 +1,10 @@
 /** @param {NS} ns **/
+
+/*
+Welcome to my pirate farmer script. Instructions in paragraph. This script is intended to be run from your home server. It will copya pf_breacher.js to all your bought servers and farm a target server until sec threshold determined by user is reached. It will do this trying to make as efficient use of available RAM as possible.
+
+
+ */
 export async function main(ns) {
 	ns.print(
 		`
@@ -14,7 +20,7 @@ export async function main(ns) {
 
 	// general variables
 	var hostServer = ns.getHostname();
-	var filesToCopy = ["pf_breacher.js"]
+	var filesToCopy = ["/pirateFarmer/pf_breacher.js"]
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	// money variables
@@ -137,7 +143,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, 1);
+					ns.exec("/pirateFarmer/pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, 1);
 
 					// more than one server needed
 				} else if (repetitionsDifference > secRepetitionsMade) {
