@@ -24,9 +24,9 @@ export async function main(ns) {
 
 	// SERVER LIST BUILDER
 
-	// creates array wich elements are 
-	// arrays formated: [serverName, serverRAM]
-	// creates var with sum up RAM
+	// creates array with elements arrays formated: [serverName, serverRAM]
+    // input: purchasedServersArray
+	// creates totalServerRAM with sum of array's servers RAM
 	ns.print(`Purch srv array : ${purchasedServersArray} `);
 	var selectedServerArray = [];
 	var totalServersRAM = 0;
