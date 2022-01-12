@@ -1,6 +1,6 @@
 /** @param {NS} ns **/
 
-// reduces sec level
+// reduces sec level until given threshold or minimum level
 export async function main(ns) {
 	var target = ns.args[0];
 	var secThresh = ns.getServerMinSecurityLevel(target) + 5;
