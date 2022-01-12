@@ -178,6 +178,11 @@ export async function main(ns) {
 				s++
 			}
 		}
+
+		if (offTime.length === 0) {
+			ns.print(`sec while loop exited without adding to offTime`)
+			ns.exit()
+		}
 		ns.print(`off time is ${offTime} `)
 		await ns.sleep(offTime[0])
 	}
