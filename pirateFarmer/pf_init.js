@@ -14,7 +14,7 @@ export async function main(ns) {
 
 	// general variables
 	var hostServer = ns.getHostname();
-	var filesToCopy = ["pBbreacher.ns"]
+	var filesToCopy = ["pf_breacher.js"]
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	// money variables
