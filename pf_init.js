@@ -20,7 +20,7 @@ export async function main(ns) {
 
 	// general variables
 	var hostServer = ns.getHostname();
-	var filesToCopy = ["/pirateFarmer/pf_breacher.js"]
+	var filesToCopy = ["pf_breacher.js"]
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	// money variables
@@ -143,7 +143,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("/pirateFarmer/pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, 1);
+					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, 1);
 
 					// more than one server needed
 				} else if (repetitionsDifference > secRepetitionsMade) {
