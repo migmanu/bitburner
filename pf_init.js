@@ -10,7 +10,6 @@ export async function main(ns) {
 		`
 		pB_init.ns init with args: 
 		target=${ns.args[0]}, 
-		secLevelThreshold=${ns.args[1]}, 
 		`
 	)
 
@@ -143,7 +142,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, 1);
+					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, secLevelThreshold);
 
 					// more than one server needed
 				} else if (repetitionsDifference > secRepetitionsMade) {
@@ -158,7 +157,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], serverMaxRepetitions, target, 1);
+					ns.exec("pf_breacher.js", secServerArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
 
 				} else {
 					ns.print(
