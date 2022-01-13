@@ -16,7 +16,6 @@ export async function main(ns) {
 
 	// args
 	var target = ns.args[0];
-	var secLevelThreshold = ns.args[1]; // usr determined max level for hack
 
 	// general variables
 	var hostServer = ns.getHostname();
@@ -55,6 +54,7 @@ export async function main(ns) {
 
 	// SEC BREACHER
 	var secLevel = ns.getServerSecurityLevel(target);
+	var secLevelThreshold = ns.getServerMinSecurityLevel(target)
 
 	// calculate repetitions needed given server's total RAM
 	var secScriptRamUsage = ns.getScriptRam("pBbreacher.ns");
