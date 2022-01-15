@@ -147,7 +147,7 @@ export async function main(ns) {
 					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, secLevelThreshold);
 
 					// more than one server needed
-				} else if (repetitionsDifference > secRepetitionsMade) {
+				} else if (repetitionsDifference > secRepetitionsMade && serverMaxRepetitions >= 1) {
 					ns.print(`more than one server needed`);
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
