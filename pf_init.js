@@ -56,7 +56,7 @@ export async function main(ns) {
 	var secLevelThreshold = ns.getServerMinSecurityLevel(target)
 
 	// calculate repetitions needed given server's total RAM
-	var secScriptRamUsage = ns.getScriptRam("pBbreacher.ns");
+	var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
 	var secScriptTime = ns.getWeakenTime(target);
 	var secScriptThreads = Math.floor(totalServersRAM / secScriptRamUsage);
 	var expectedWeakenImpact = ns.weakenAnalyze(secScriptThreads);
@@ -125,7 +125,12 @@ export async function main(ns) {
 				// one or less servers needed
 				if (repetitionsDifference > 0 && repetitionsDifference <= serverMaxRepetitions) {
 					ns.print(`one or less servers needed`)
-					ns.print(`server reps : ${repetitionsDifference}`)
+					ns.print(
+						`
+						rep diff: ${repetitionsDifference};
+						srv max reps: ${serverMaxRepetitions}
+						`
+						)
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + repetitionsDifference;
 
@@ -138,7 +143,7 @@ export async function main(ns) {
 					// add time to offTime
 					offTime.push(secScriptTime)
 
-					// add to use sec severs
+					// add to used sec severs
 					usedSecServers++;
 
 					// execute breacher
