@@ -168,6 +168,7 @@ export async function main(ns) {
 						Reps made: ${secRepetitionsMade};
 						reps needed: ${secRepetitionsNeeded};
 						Rep diff: ${repetitionsDifference}:
+						srv max reps: ${serverMaxRepetitions};
 						Used sec srv: ${usedSecServers}
 						`
 					);
