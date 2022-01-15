@@ -3,6 +3,7 @@
 /*
 Welcome to my pirate farmer script. Instructions in paragraph. This script is intended to be run from your home server. It will copya pf_breacher.js to all your bought servers and farm a target server until sec threshold determined by user is reached. It will do this trying to make as efficient use of available RAM as possible.
 
+IMPORTANT: If breacher file name is changed, this script must be updated accodingly.
 
  */
 export async function main(ns) {
@@ -31,7 +32,6 @@ export async function main(ns) {
 	// creates array with elements arrays formated: [serverName, serverRAM]
     // input: purchasedServersArray
 	// creates totalServerRAM with sum of array's servers RAM
-	ns.print(`Purch srv array : ${purchasedServersArray} `);
 	var selectedServerArray = [];
 	var totalServersRAM = 0;
 	for (const srv of purchasedServersArray) {
@@ -43,7 +43,6 @@ export async function main(ns) {
 		selectedServerArray.push(serverInfo);
 	}
 
-	ns.print(`selected srv array: ${selectedServerArray} `);
 
 
 	// SCRIPT PASTER
@@ -85,9 +84,7 @@ export async function main(ns) {
 		// SEC BREACHER
 
 		// copy server array
-		ns.print(` original array ${selectedServerArray} `)
 		var secServerArray = selectedServerArray.filter(() => true);
-		ns.print(` sec array: ${secServerArray} `)
 		// create array for grower
 		var groServerArray = []
 		ns.print(`gro array ${groServerArray} `)
