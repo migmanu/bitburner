@@ -106,10 +106,15 @@ export async function main(ns) {
 				used srv: ${usedSecServers}
 				`
 			)
-
+			
+			// 
+			var secRepetitionDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
+			
+			// server while loop
 			// for each server in list
+			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s < secServerArray.length) {
+			while (s < secServerArray.length && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
@@ -119,21 +124,20 @@ export async function main(ns) {
 				)
 				// divide available server RAM by script requirement
 				var serverMaxRepetitions = Math.floor(secServerArray[0][1] / secScriptRamUsage);
-				var repetitionsDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
 				// AND rep diff must be eqaual or smaller to srv max reps to justify oly one srv called
-				if (repetitionsDifference > 0 && repetitionsDifference <= serverMaxRepetitions) {
+				if (secRepetitionDifference > 0 && secRepetitionDifference <= serverMaxRepetitions) {
 					ns.print(`one or less servers needed`)
 					ns.print(
 						`
-						rep diff: ${repetitionsDifference};
+						rep diff: ${secRepetitionDifference};
 						srv max reps: ${serverMaxRepetitions}
 						`
 						)
 					// add to repetitions made
-					secRepetitionsMade = secRepetitionsMade + repetitionsDifference;
+					secRepetitionsMade = secRepetitionsMade + secRepetitionDifference;
 
 					// add server to groServerArray
 					var serverArray = [];
@@ -148,7 +152,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", secServerArray[s][0], secRepetitionDifference, target, secLevelThreshold);
 
 					// more than one server needed
 					// srv max reps must be larger than 1 for valid thread call
@@ -172,7 +176,7 @@ export async function main(ns) {
 						ERROR: script failed both if statements;
 						Reps made: ${secRepetitionsMade};
 						reps needed: ${secRepetitionsNeeded};
-						Rep diff: ${repetitionsDifference}:
+						Rep diff: ${secRepetitionDifference}:
 						srv max reps: ${serverMaxRepetitions};
 						Used sec srv: ${usedSecServers}
 						`
