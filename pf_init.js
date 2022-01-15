@@ -36,7 +36,7 @@ export async function main(ns) {
 	var totalServersRAM = 0;
 	for (const srv of purchasedServersArray) {
 		var serverInfo = [];
-		var serverFreeRam = ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv);
+		var serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
 		serverInfo.push(srv);
 		serverInfo.push(serverFreeRam);
 		totalServersRAM = totalServersRAM + serverFreeRam;
