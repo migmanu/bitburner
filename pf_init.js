@@ -5,6 +5,8 @@ Welcome to my pirate farmer script. Instructions in paragraph. This script is in
 
 IMPORTANT: If breacher file name is changed, this script must be updated accodingly.
 
+TODO: add kill scripts on servers to avoid bugs?
+
  */
 export async function main(ns) {
 	ns.print(
@@ -120,6 +122,8 @@ export async function main(ns) {
 				var repetitionsDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
 
 				// one or less servers needed
+				// rep diff must be larger than 0 to avoid invalid thread call
+				// AND rep diff must be eqaual or smaller to srv max reps to justify oly one srv called
 				if (repetitionsDifference > 0 && repetitionsDifference <= serverMaxRepetitions) {
 					ns.print(`one or less servers needed`)
 					ns.print(
@@ -147,7 +151,8 @@ export async function main(ns) {
 					ns.exec("pf_breacher.js", secServerArray[s][0], repetitionsDifference, target, secLevelThreshold);
 
 					// more than one server needed
-				} else if (repetitionsDifference > secRepetitionsMade && serverMaxRepetitions >= 1) {
+					// srv max reps must be larger than 1 for valid thread call
+				} else if (serverMaxRepetitions >= 1) {
 					ns.print(`more than one server needed`);
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
