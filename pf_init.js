@@ -59,11 +59,11 @@ export async function main(ns) {
 	// calculate repetitions needed given server's total RAM
 	var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
 	var secScriptTime = ns.getWeakenTime(target);
+	var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
 	var secScriptThreads = Math.floor(totalServersRAM / secScriptRamUsage);
 	var expectedWeakenImpact = ns.weakenAnalyze(secScriptThreads);
-	var totalExpectedWeakenImpact = secScriptThreads * expectedWeakenImpact;
 	var secImpactNeeded = (secLevel - secLevelThreshold);
-	var secRepetitionsNeeded = 25 //Math.floor((secLevel - secLevelThreshold) / totalExpectedWeakenImpact);
+	var secRepetitionsNeeded = Math.floor(secImpactNeeded / secScriptImpact);
 
 	ns.print(
 		`
@@ -72,16 +72,16 @@ export async function main(ns) {
 		sec script thrs: ${secScriptThreads};
 		sec script impact: ${expectedWeakenImpact};
 		impact needed: ${secImpactNeeded};
-		total weaken impact: ${totalExpectedWeakenImpact};
 		total RAM: ${totalServersRAM};
-		repetitions: ${secRepetitionsNeeded}
+		repetitions needed: ${secRepetitionsNeeded}
 		`
 	)
 	// while loop for all scripts	
 	while (true) {
-		ns.print("global while init")
+		ns.print("global while init");
+		ns.print(`sec reps needed: ${secRepetitionsNeeded}`)
 		var secRepetitionsMade = 0;
-		var offTime = [];
+		var offTime = [secScriptTime];
 
 		// SEC BREACHER
 
@@ -119,7 +119,8 @@ export async function main(ns) {
 					`
 					server while init S: ${s};
 					length: ${secServerArray.length};
-					rep diff: ${secRepetitionsNeeded - secRepetitionsMade}
+					reps needed: ${secRepetitionsNeeded};
+					rep diff: ${secRepetitionDifference}
 					`
 				)
 				// divide available server RAM by script requirement
