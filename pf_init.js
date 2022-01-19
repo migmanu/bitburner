@@ -60,8 +60,6 @@ export async function main(ns) {
 	var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
 	var secScriptTime = ns.getWeakenTime(target);
 	var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
-	var secScriptThreads = Math.floor(totalServersRAM / secScriptRamUsage);
-	var expectedWeakenImpact = ns.weakenAnalyze(secScriptThreads);
 	var secImpactNeeded = (secLevel - secLevelThreshold);
 	var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
 
