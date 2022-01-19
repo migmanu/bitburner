@@ -112,7 +112,7 @@ export async function main(ns) {
 			// for each server in list
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s < secServerArray.length && secRepetitionDifference > 0) {
+			while (s <= secServerArray.length && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
