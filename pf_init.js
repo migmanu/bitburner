@@ -67,8 +67,6 @@ export async function main(ns) {
 		`
 		sec script RAM: ${secScriptRamUsage};
 		sec script time: ${secScriptTime};
-		sec script thrs: ${secScriptThreads};
-		sec script impact: ${expectedWeakenImpact};
 		impact needed: ${secImpactNeeded};
 		total RAM: ${totalServersRAM};
 		repetitions needed: ${secRepetitionsNeeded}
@@ -125,15 +123,13 @@ export async function main(ns) {
 					`
 					sec script RAM: ${secScriptRamUsage};
 					sec script time: ${secScriptTime};
-					sec script thrs: ${secScriptThreads};
-					sec script impact: ${expectedWeakenImpact};
 					impact needed: ${secImpactNeeded};
 					total RAM: ${totalServersRAM};
 					repetitions needed: ${secRepetitionsNeeded}
 					`
 				)
 				// divide available server RAM by script requirement
-				var serverMaxRepetitions = Math.floor(secServerArray[0][1] / secScriptRamUsage);
+				var serverMaxRepetitions = Math.floor(secServerArray[s][1] / secScriptRamUsage);
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
