@@ -63,7 +63,7 @@ export async function main(ns) {
 	var secScriptThreads = Math.floor(totalServersRAM / secScriptRamUsage);
 	var expectedWeakenImpact = ns.weakenAnalyze(secScriptThreads);
 	var secImpactNeeded = (secLevel - secLevelThreshold);
-	var secRepetitionsNeeded = Math.floor(secImpactNeeded / secScriptImpact);
+	var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
 
 	ns.print(
 		`
@@ -121,6 +121,17 @@ export async function main(ns) {
 					length: ${secServerArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
+					`
+				)
+				ns.print(
+					`
+					sec script RAM: ${secScriptRamUsage};
+					sec script time: ${secScriptTime};
+					sec script thrs: ${secScriptThreads};
+					sec script impact: ${expectedWeakenImpact};
+					impact needed: ${secImpactNeeded};
+					total RAM: ${totalServersRAM};
+					repetitions needed: ${secRepetitionsNeeded}
 					`
 				)
 				// divide available server RAM by script requirement
