@@ -85,6 +85,7 @@ export async function main(ns) {
 		var secServerArray = selectedServerArray.filter(() => true);
 		// create array for grower
 		var groServerArray = []
+		ns.print(`sec srv array: ${secServerArray}`)
 		ns.print(`gro array ${groServerArray} `)
 
 		// stop loop when all servers busy
@@ -110,10 +111,13 @@ export async function main(ns) {
 			// for each server in list
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s <= secServerArray.length && secRepetitionDifference > 0) {
+			while (s < secServerArray.length && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
+					sec array: ${secServerArray};
+					first element: ${secServerArray[0]};
+					this element: ${secServerArray[s]};
 					length: ${secServerArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
@@ -142,8 +146,12 @@ export async function main(ns) {
 						srv max reps: ${serverMaxRepetitions}
 						`
 						)
+
+					// update repetition difference
+					secRepetitionDifference = secRepetitionDifference - secRepetitionsMade;
+
 					// add to repetitions made
-					secRepetitionsMade = secRepetitionsMade + secRepetitionDifference;
+					secRepetitionsMade = secRepetitionDifference;
 
 					// add server to groServerArray
 					var serverArray = [];
@@ -164,9 +172,12 @@ export async function main(ns) {
 					// srv max reps must be larger than 1 for valid thread call
 				} else if (serverMaxRepetitions >= 1) {
 					ns.print(`more than one server needed`);
+
+					// update repetition difference
+					secRepetitionDifference = secRepetitionDifference - secRepetitionsMade;
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
-
+					ns.print(`REPS MADE: ${secRepetitionsMade}`)
 					// add tim to offTime
 					offTime.push(secScriptTime)
 
