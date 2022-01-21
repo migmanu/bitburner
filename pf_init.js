@@ -11,6 +11,7 @@ IMPORTANT: If any file name is changed, this script must be updated accodingly.
 TODO: 
 	- add kill scripts on servers to avoid bugs?
 	- move sec variables into global while loop
+	- change sec while to if codnitional?
 
  */
 export async function main(ns) {
@@ -52,7 +53,8 @@ export async function main(ns) {
 	// SEC BREACHER VARIABLES //
 
 	var secLevel = ns.getServerSecurityLevel(target);
-	var secLevelThreshold = ns.getServerMinSecurityLevel(target)
+	// max sec level until which weaken() is called. Default is server min sec level
+	var secLevelThreshold = ns.getServerMinSecurityLevel(target); 
 
 	// calculate repetitions needed given server's total RAM
 	var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
@@ -204,10 +206,16 @@ export async function main(ns) {
 
 		
 		// GROWER //
+
 		var serverMoney = ns.getServerMoneyAvailable(target);
-		var ServerMaxMoney = ns.getServerMaxMoney(target);
+		var serverMaxMoney = ns.getServerMaxMoney(target);
 
 		// calculate repetitions needed given available RAM
+
+		// get multiplier for gorwthAnalyze
+		var differenceToMaxMoney = serverMaxMoney - serverMoney;
+		
+
 		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
 		var growScriptTime = ns.getGrowTime(target);
 		//var growImpact = ns.growthAnalyze(1);
