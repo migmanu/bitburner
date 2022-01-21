@@ -128,7 +128,7 @@ export async function main(ns) {
 						)
 
 					// update repetition difference
-					secRepetitionDifference = secRepetitionDifference - secRepetitionsMade;
+					secRepetitionDifference = 0;
 
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionDifference;
@@ -154,7 +154,7 @@ export async function main(ns) {
 					ns.print(`more than one server needed`);
 
 					// update repetition difference
-					secRepetitionDifference = secRepetitionDifference - secRepetitionsMade;
+					secRepetitionDifference = secRepetitionDifference - serverMaxRepetitions;
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
 					ns.print(`REPS MADE: ${secRepetitionsMade}`)
