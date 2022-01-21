@@ -206,6 +206,13 @@ export async function main(ns) {
 		// GROWER //
 		var serverMoney = ns.getServerMoneyAvailable(target);
 		var ServerMaxMoney = ns.getServerMaxMoney(target);
+
+		// calculate repetitions needed given available RAM
+		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
+		var growScriptTime = ns.getGrowTime(target);
+		//var growImpact = ns.growthAnalyze(1);
+
+
 		
 	}
 }
