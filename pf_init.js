@@ -8,7 +8,9 @@ server. It will do this trying to make as efficient use of available RAM as poss
 It will use the following associated files: pf_breacher.js, pf_grower.js, pf_hacker,js 
 IMPORTANT: If any file name is changed, this script must be updated accodingly.
 
-TODO: add kill scripts on servers to avoid bugs?
+TODO: 
+	- add kill scripts on servers to avoid bugs?
+	- move sec variables into global while loop
 
  */
 export async function main(ns) {
@@ -61,7 +63,6 @@ export async function main(ns) {
 
 	
 	// GROWER VARIABLES //
-	var moneyAmount = ns.getServerMoney
 
 	// while loop for all scripts	
 	while (true) {
@@ -201,7 +202,8 @@ export async function main(ns) {
 		ns.print(`off time is ${offTime} `)
 		await ns.sleep(offTime[0])
 
-		// GROWER
+		
+		// GROWER //
 		var serverMoney = ns.getServerMoneyAvailable(target);
 		var ServerMaxMoney = ns.getServerMaxMoney(target);
 		
