@@ -193,6 +193,6 @@ export async function main(ns) {
 			ns.exit()
 		}
 		ns.print(`off time is ${offTime} `)
-		await ns.sleep(offTime[0])
+		await ns.sleep(Math.ceil(offTime[0]))
 	}
 }
