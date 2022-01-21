@@ -1,9 +1,12 @@
 /** @param {NS} ns **/
 
 /*
-Welcome to my pirate farmer script. Instructions in paragraph. This script is intended to be run from your home server. It will copya pf_breacher.js to all your bought servers and farm a target server until sec threshold determined by user is reached. It will do this trying to make as efficient use of available RAM as possible.
+Welcome to my pirate farmer script. Instructions in paragraph. This script is intended to be run 
+from your home server. It will copy pf_breacher.js to all your bought servers and farm a target 
+server. It will do this trying to make as efficient use of available RAM as possible.
 
-IMPORTANT: If breacher file name is changed, this script must be updated accodingly.
+It will use the following associated files: pf_breacher.js, pf_grower.js, pf_hacker,js 
+IMPORTANT: If any file name is changed, this script must be updated accodingly.
 
 TODO: add kill scripts on servers to avoid bugs?
 
@@ -18,12 +21,8 @@ export async function main(ns) {
 	var filesToCopy = ["pf_breacher.js"]
 	var purchasedServersArray = ns.getPurchasedServers();
 
-	// money variables
-	var money = ns.getServerMoneyAvailable(target);
-	var maxMoney = ns.getServerMaxMoney(target);
-
-
-	// SERVER LIST BUILDER
+	
+	// SERVER LIST BUILDER //
 
 	// creates array with elements arrays formated: [serverName, serverRAM]
     // input: purchasedServersArray
@@ -41,12 +40,15 @@ export async function main(ns) {
 
 
 
-	// SCRIPT PASTER
+	// SCRIPT PASTER //
+
 	for (const srv of selectedServerArray) {
 		await ns.scp(filesToCopy, srv[0]);
 	}
 
-	// SEC BREACHER
+	
+	// SEC BREACHER VARIABLES //
+
 	var secLevel = ns.getServerSecurityLevel(target);
 	var secLevelThreshold = ns.getServerMinSecurityLevel(target)
 
@@ -57,15 +59,19 @@ export async function main(ns) {
 	var secImpactNeeded = (secLevel - secLevelThreshold);
 	var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
 
+	
+	// GROWER VARIABLES //
+	var moneyAmount = ns.getServerMoney
+
 	// while loop for all scripts	
 	while (true) {
 		ns.print("global while init");
 		ns.print(`sec reps needed: ${secRepetitionsNeeded}`)
-		var secRepetitionsMade = 0;
 		var offTime = [secScriptTime];
 
-		// SEC BREACHER
+		// SEC BREACHER //
 
+		var secRepetitionsMade = 0;
 		// copy server array
 		var secServerArray = selectedServerArray.filter(() => true);
 		// create array for grower
@@ -194,5 +200,10 @@ export async function main(ns) {
 		}
 		ns.print(`off time is ${offTime} `)
 		await ns.sleep(offTime[0])
+
+		// GROWER
+		var serverMoney = ns.getServerMoneyAvailable(target);
+		var ServerMaxMoney = ns.getServerMaxMoney(target);
+		
 	}
 }
