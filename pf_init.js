@@ -108,6 +108,7 @@ export async function main(ns) {
 					rep diff: ${secRepetitionDifference}
 					sec script RAM: ${secScriptRamUsage};
 					sec script time: ${secScriptTime};
+					sec script impact: ${secScriptImpact};
 					impact needed: ${secImpactNeeded};
 					total RAM: ${totalServersRAM};
 					`
