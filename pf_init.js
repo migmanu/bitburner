@@ -9,12 +9,6 @@ TODO: add kill scripts on servers to avoid bugs?
 
  */
 export async function main(ns) {
-	ns.print(
-		`
-		pB_init.ns init with args: 
-		target=${ns.args[0]}, 
-		`
-	)
 
 	// args
 	var target = ns.args[0];
@@ -63,15 +57,6 @@ export async function main(ns) {
 	var secImpactNeeded = (secLevel - secLevelThreshold);
 	var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
 
-	ns.print(
-		`
-		sec script RAM: ${secScriptRamUsage};
-		sec script time: ${secScriptTime};
-		impact needed: ${secImpactNeeded};
-		total RAM: ${totalServersRAM};
-		repetitions needed: ${secRepetitionsNeeded}
-		`
-	)
 	// while loop for all scripts	
 	while (true) {
 		ns.print("global while init");
@@ -121,15 +106,10 @@ export async function main(ns) {
 					length: ${secServerArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
-					`
-				)
-				ns.print(
-					`
 					sec script RAM: ${secScriptRamUsage};
 					sec script time: ${secScriptTime};
 					impact needed: ${secImpactNeeded};
 					total RAM: ${totalServersRAM};
-					repetitions needed: ${secRepetitionsNeeded}
 					`
 				)
 				// divide available server RAM by script requirement
