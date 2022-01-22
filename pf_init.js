@@ -8,6 +8,24 @@ server. It will do this trying to make as efficient use of available RAM as poss
 It will use the following associated files: pf_breacher.js, pf_grower.js, pf_hacker,js 
 IMPORTANT: If any file name is changed, this script must be updated accodingly.
 
+The script works with a global while loop that calls nested loops as needed. The structure of the script is:
+
+- argument passed on script call
+- general variables
+- server list builder
+- script paster
+- sec variables
+- grow variables
+- global while loop
+	- sec breacher
+		- security while loop
+			- server while loop
+				- if statement for one or less servers needed
+				- if statement for more than one server needed
+				- if statement to catch errors
+	- grower
+
+
 TODO: 
 	- add kill scripts on servers to avoid bugs?
 	- move sec variables into global while loop
