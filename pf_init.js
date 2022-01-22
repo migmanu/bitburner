@@ -78,9 +78,9 @@ export async function main(ns) {
 		// copy server array
 		var secServerArray = selectedServerArray.filter(() => true);
 		// create array for grower
-		var groServerArray = []
+		var growServerArray = []
 		ns.print(`sec srv array: ${secServerArray}`)
-		ns.print(`gro array ${groServerArray} `)
+		ns.print(`gro array ${growServerArray} `)
 
 		// stop loop when all servers busy
 		var availableServers = selectedServerArray.length;
@@ -147,7 +147,7 @@ export async function main(ns) {
 					var serverArray = [];
 					serverArray.push(secServerArray[s][0]);
 					serverArray.push(secServerArray[s][1]);
-					groServerArray.push(serverArray);
+					growServerArray.push(serverArray);
 
 					// add time to offTime
 					offTime.push(secScriptTime)
@@ -197,13 +197,6 @@ export async function main(ns) {
 			}
 		}
 
-		if (offTime.length === 0) {
-			ns.print(`sec while loop exited without adding to offTime`)
-			ns.exit()
-		}
-		ns.print(`off time is ${offTime} `)
-		await ns.sleep(offTime[0])
-
 		
 		// GROWER //
 
@@ -212,7 +205,7 @@ export async function main(ns) {
 
 		// calculate repetitions needed given available RAM
 
-		// get multiplier for gorwthAnalyze
+		// get multiplier for growthAnalyze
 		var differenceToMaxMoney = serverMaxMoney - serverMoney;
 		
 
@@ -220,6 +213,12 @@ export async function main(ns) {
 		var growScriptTime = ns.getGrowTime(target);
 		//var growImpact = ns.growthAnalyze(1);
 
+		if (offTime.length === 0) {
+			ns.print(`sec while loop exited without adding to offTime`)
+			ns.exit()
+		}
+		ns.print(`off time is ${offTime} `)
+		await ns.sleep(offTime[0])
 
 		
 	}
