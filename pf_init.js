@@ -76,11 +76,11 @@ export async function main(ns) {
 
 		var secRepetitionsMade = 0;
 		// copy server array
-		var secServerArray = selectedServerArray.filter(() => true);
+		var secServersArray = selectedServerArray.filter(() => true);
 		// create array for grower
-		var growServerArray = []
-		ns.print(`sec srv array: ${secServerArray}`)
-		ns.print(`gro array ${growServerArray} `)
+		var growServersArray = []
+		ns.print(`sec srv array: ${secServersArray}`)
+		ns.print(`gro array ${growServersArray} `)
 
 		// stop loop when all servers busy
 		var availableServers = selectedServerArray.length;
@@ -105,14 +105,14 @@ export async function main(ns) {
 			// for each server in list
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s < secServerArray.length && secRepetitionDifference > 0) {
+			while (s < secServersArray.length && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
-					sec array: ${secServerArray};
-					first element: ${secServerArray[0]};
-					this element: ${secServerArray[s]};
-					length: ${secServerArray.length};
+					sec array: ${secServersArray};
+					first element: ${secServersArray[0]};
+					this element: ${secServersArray[s]};
+					length: ${secServersArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
 					sec script RAM: ${secScriptRamUsage};
@@ -123,7 +123,7 @@ export async function main(ns) {
 					`
 				)
 				// divide available server RAM by script requirement
-				var serverMaxRepetitions = Math.floor(secServerArray[s][1] / secScriptRamUsage);
+				var serverMaxRepetitions = Math.floor(secServersArray[s][1] / secScriptRamUsage);
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
@@ -145,9 +145,9 @@ export async function main(ns) {
 
 					// add server to groServerArray
 					var serverArray = [];
-					serverArray.push(secServerArray[s][0]);
-					serverArray.push(secServerArray[s][1]);
-					growServerArray.push(serverArray);
+					serverArray.push(secServersArray[s][0]);
+					serverArray.push(secServersArray[s][1]);
+					growServersArray.push(serverArray);
 
 					// add time to offTime
 					offTime.push(secScriptTime)
@@ -156,7 +156,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], secRepetitionDifference, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", secServersArray[s][0], secRepetitionDifference, target, secLevelThreshold);
 
 					// more than one server needed
 					// srv max reps must be larger than 1 for valid thread call
@@ -175,7 +175,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServerArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", secServersArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
 
 				} else {
 					ns.print(
