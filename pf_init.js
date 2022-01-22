@@ -127,7 +127,7 @@ export async function main(ns) {
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
-				// AND rep diff must be eqaual or smaller to srv max reps to justify oly one srv called
+				// AND rep diff must be equal or smaller to srv max reps to justify only one srv called
 				if (secRepetitionDifference > 0 && secRepetitionDifference <= serverMaxRepetitions) {
 					ns.print(`one or less servers needed`)
 					ns.print(
@@ -143,12 +143,14 @@ export async function main(ns) {
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionDifference;
 
-					// add server to groServerArray
-					var serverArray = [];
-					serverArray.push(secServersArray[s][0]);
-					serverArray.push(secServersArray[s][1]);
-					growServersArray.push(serverArray);
-
+					// add server to growServerArray only if server has RAM unused
+					if (serverMaxRepetitions < secRepetitionsNeeded) {
+						var serverArray = [];
+						serverArray.push(secServersArray[s][0]);
+						serverArray.push(secServersArray[s][1]);
+						growServersArray.push(serverArray);
+					}
+					
 					// add time to offTime
 					offTime.push(secScriptTime)
 
