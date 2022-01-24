@@ -147,13 +147,18 @@ export async function main(ns) {
 
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionDifference;
+					
 
-					// add server to growServerArray only if server has RAM unused
+					// remove element server element from serverArray
+					serversArray.splice(s, 1)
+					// add server element to serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
-						var serverArray = [];
-						serverArray.push(serversArray[s][0]);
-						serverArray.push(serversArray[s][1]);
-						growServersArray.push(serverArray);
+						var serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[s]) - ns.getServerUsedRam(serversArray[s]));;
+						ns.print(`${serversArray[s]} has ${serverFreeRam} available RAM`);
+						var serverElement = [];
+						serverElement.push(serversArray[s][0]);
+						serverElement.push(serverFreeRam);
+						serversArray.push(serverElement);
 					}
 					
 					// add time to offTime
