@@ -48,7 +48,7 @@ export async function main(ns) {
 	// creates array with elements arrays formated: [serverName, serverRAM]
     // input: purchasedServersArray
 	// creates totalServerRAM with sum of array's servers RAM
-	var selectedServerArray = [];
+	var builtServersArray = [];
 	var totalServersRAM = 0;
 	for (const srv of purchasedServersArray) {
 		var serverInfo = [];
@@ -56,14 +56,14 @@ export async function main(ns) {
 		serverInfo.push(srv);
 		serverInfo.push(serverFreeRam);
 		totalServersRAM = totalServersRAM + serverFreeRam;
-		selectedServerArray.push(serverInfo);
+		builtServersArray.push(serverInfo);
 	}
 
 
 
 	// SCRIPT PASTER //
 
-	for (const srv of selectedServerArray) {
+	for (const srv of builtServersArray) {
 		await ns.scp(filesToCopy, srv[0]);
 	}
 
@@ -87,50 +87,37 @@ export async function main(ns) {
 	// while loop for all scripts	
 	while (true) {
 		ns.print("global while init");
-		ns.print(`sec reps needed: ${secRepetitionsNeeded}`)
 		var offTime = [secScriptTime];
 
 		// SEC BREACHER //
 
 		var secRepetitionsMade = 0;
 		// copy server array
-		var secServersArray = selectedServerArray.filter(() => true);
+		var serversArray = builtServersArray.filter(() => true);
 		// create array for grower
 		var growServersArray = []
-		ns.print(`sec srv array: ${secServersArray}`)
-		ns.print(`gro array ${growServersArray} `)
 
 		// stop loop when all servers busy
-		var availableServers = selectedServerArray.length;
+		var availableServers = serversArray.length;
 		var usedSecServers = 0;
-		ns.print(`av servers: ${availableServers} `);
 
 		// while loop only if there are more repetitions needed AND servers available
 		while (secRepetitionsMade < secRepetitionsNeeded && usedSecServers < availableServers) {
-			ns.print(
-				`
-				sec while init;
-				sec reps made ${secRepetitionsMade};
-				av srv: ${availableServers};
-				used srv: ${usedSecServers}
-				`
-			)
 			
-			// 
 			var secRepetitionDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
 			
 			// server while loop
 			// for each server in list
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s < secServersArray.length && secRepetitionDifference > 0) {
+			while (s < serversArray.length && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
-					sec array: ${secServersArray};
-					first element: ${secServersArray[0]};
-					this element: ${secServersArray[s]};
-					length: ${secServersArray.length};
+					sec array: ${serversArray};
+					first element: ${serversArray[0]};
+					this element: ${serversArray[s]};
+					length: ${serversArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
 					sec script RAM: ${secScriptRamUsage};
@@ -141,7 +128,7 @@ export async function main(ns) {
 					`
 				)
 				// divide available server RAM by script requirement
-				var serverMaxRepetitions = Math.floor(secServersArray[s][1] / secScriptRamUsage);
+				var serverMaxRepetitions = Math.floor(serversArray[s][1] / secScriptRamUsage);
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
@@ -164,8 +151,8 @@ export async function main(ns) {
 					// add server to growServerArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
 						var serverArray = [];
-						serverArray.push(secServersArray[s][0]);
-						serverArray.push(secServersArray[s][1]);
+						serverArray.push(serversArray[s][0]);
+						serverArray.push(serversArray[s][1]);
 						growServersArray.push(serverArray);
 					}
 					
@@ -176,7 +163,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServersArray[s][0], secRepetitionDifference, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", serversArray[s][0], secRepetitionDifference, target, secLevelThreshold);
 
 					// more than one server needed
 					// srv max reps must be larger than 1 for valid thread call
@@ -195,7 +182,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", secServersArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", serversArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
 
 				} else {
 					ns.print(
@@ -233,6 +220,9 @@ export async function main(ns) {
 		var growScriptTime = ns.getGrowTime(target);
 		//var growImpact = ns.growthAnalyze(1);
 
+
+
+		// use sleep method to await until all scripts ran
 		if (offTime.length === 0) {
 			ns.print(`sec while loop exited without adding to offTime`)
 			ns.exit()
