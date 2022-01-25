@@ -70,35 +70,39 @@ export async function main(ns) {
 	
 	// SEC BREACHER VARIABLES //
 
-	var secLevel = ns.getServerSecurityLevel(target);
-	// max sec level until which weaken() is called. Default is server min sec level
-	var secLevelThreshold = ns.getServerMinSecurityLevel(target); 
-
-	// calculate repetitions needed given server's total RAM
-	var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
-	var secScriptTime = ns.getWeakenTime(target);
-	var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
-	var secImpactNeeded = (secLevel - secLevelThreshold);
-	var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
-
 	
-	// GROWER VARIABLES //
+	
+	
 
 	// while loop for all scripts	
 	while (true) {
 		ns.print("global while init");
-		var offTime = [secScriptTime];
 
-		// SEC BREACHER //
+		// 								SEC BREACHER 										//
+		//----------------------------------------------------------------------------------//
+		var secLevel = ns.getServerSecurityLevel(target);
+		
+		// max sec level until which weaken() is called. Default is server min sec level
+		var secLevelThreshold = ns.getServerMinSecurityLevel(target); 
 
-		var secRepetitionsMade = 0;
+		// calculate repetitions needed given server's total RAM
+		var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
+		var secScriptTime = ns.getWeakenTime(target);
+		var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
+		var secImpactNeeded = (secLevel - secLevelThreshold);
+		var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
+
+		var offTime = [secScriptTime]; // time for sleep method in milliseconds
+		
+		var secRepetitionsMade = 0; // updated on every exec() call with amount + 1 * threads
+
 		// copy server array
+		// servers with no spare RAM after exec() call are taken out and servers with spare RAM are updated
 		var serversArray = builtServersArray.filter(() => true);
-		// create array for grower
-		var growServersArray = []
 
+	
 		// stop loop when all servers busy
-		var availableServers = serversArray.length;
+		var availableServers = serversArray.length; // number of servers before serversArray is mutated
 		var usedSecServers = 0;
 
 		// while loop only if there are more repetitions needed AND servers available
@@ -110,7 +114,7 @@ export async function main(ns) {
 			// for each server in list
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
-			while (s < builtServersArray.length && secRepetitionDifference > 0) {
+			while (s < availableServers && secRepetitionDifference > 0) {
 				ns.print(
 					`
 					server while init S: ${s};
