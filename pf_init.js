@@ -141,25 +141,32 @@ export async function main(ns) {
 						srv max reps: ${serverMaxRepetitions}
 						`
 						)
+					
 
+					// execute breacher
+					ns.exec("pf_breacher.js", serversArray[0][0], secRepetitionDifference, target, secLevelThreshold);
+
+					// update secRepetitionsMade
+					secRepetitionsMade = secRepetitionsNeeded;
+					
 					// update repetition difference
 					secRepetitionDifference = 0;
 
-					// add to repetitions made
-					secRepetitionsMade = secRepetitionDifference;
 					
 
-					// remove server element element from serverArray
-					serversArray.splice(s, 1)
-					// add server element to serverArray only if server has RAM unused
+					
+					// add server element to end of serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
-						var serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[s]) - ns.getServerUsedRam(serversArray[s]));;
-						ns.print(`${serversArray[s]} has ${serverFreeRam} available RAM`);
+						var serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
+						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
 						var serverElement = [];
-						serverElement.push(serversArray[s][0]);
+						serverElement.push(serversArray[0][0]);
 						serverElement.push(serverFreeRam);
 						serversArray.push(serverElement);
 					}
+
+					// remove first server element element from serverArray
+					serversArray.shift();
 					
 					// add time to offTime
 					offTime.push(secScriptTime)
@@ -167,9 +174,7 @@ export async function main(ns) {
 					// add to used sec severs
 					usedSecServers++;
 
-					// execute breacher
-					ns.exec("pf_breacher.js", serversArray[s][0], secRepetitionDifference, target, secLevelThreshold);
-
+					
 					// more than one server needed
 					// srv max reps must be larger than 1 for valid thread call
 				} else if (serverMaxRepetitions >= 1) {
@@ -184,15 +189,15 @@ export async function main(ns) {
 					
 					// add time to offTime
 					offTime.push(secScriptTime)
-					
-					// remove server element element from serverArray
-					serversArray.splice(s, 1)
-
+										
 					// add to use sec severs
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", serversArray[s][0], serverMaxRepetitions, target, secLevelThreshold);
+					ns.exec("pf_breacher.js", serversArray[0][0], serverMaxRepetitions, target, secLevelThreshold);
+					
+					// remove server element element from serverArray
+					serversArray.splice(s, 1)
 
 				} else {
 					ns.print(
