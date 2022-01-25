@@ -149,7 +149,7 @@ export async function main(ns) {
 					secRepetitionsMade = secRepetitionDifference;
 					
 
-					// remove element server element from serverArray
+					// remove server element element from serverArray
 					serversArray.splice(s, 1)
 					// add server element to serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
@@ -177,11 +177,16 @@ export async function main(ns) {
 
 					// update repetition difference
 					secRepetitionDifference = secRepetitionDifference - serverMaxRepetitions;
+					
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
 					ns.print(`REPS MADE: ${secRepetitionsMade}`)
-					// add tim to offTime
+					
+					// add time to offTime
 					offTime.push(secScriptTime)
+					
+					// remove server element element from serverArray
+					serversArray.splice(s, 1)
 
 					// add to use sec severs
 					usedSecServers++;
@@ -226,7 +231,7 @@ export async function main(ns) {
 		//var growImpact = ns.growthAnalyze(1);
 
 
-
+		ns.print(`serversArray after sec loop: ${serversArray}`)
 		// use sleep method to await until all scripts ran
 		if (offTime.length === 0) {
 			ns.print(`sec while loop exited without adding to offTime`)
