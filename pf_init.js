@@ -119,16 +119,11 @@ export async function main(ns) {
 					`
 					server while init S: ${s};
 					sec array: ${serversArray};
-					first element: ${serversArray[0]};
-					this element: ${serversArray[s]};
 					length: ${serversArray.length};
 					reps needed: ${secRepetitionsNeeded};
 					rep diff: ${secRepetitionDifference}
-					sec script RAM: ${secScriptRamUsage};
 					sec script time: ${secScriptTime};
-					sec script impact: ${secScriptImpact};
 					impact needed: ${secImpactNeeded};
-					total RAM: ${totalServersRAM};
 					`
 				)
 				// divide available server RAM by script requirement
@@ -246,7 +241,6 @@ export async function main(ns) {
 			ns.print(`sec while loop exited without adding to offTime`)
 			ns.exit()
 		}
-		ns.print(`off time is ${offTime} `)
 		await ns.sleep(offTime[0])
 
 		
