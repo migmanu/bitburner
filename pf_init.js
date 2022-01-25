@@ -197,7 +197,7 @@ export async function main(ns) {
 					ns.exec("pf_breacher.js", serversArray[0][0], serverMaxRepetitions, target, secLevelThreshold);
 					
 					// remove server element element from serverArray
-					serversArray.splice(s, 1)
+					serversArray.shift();
 
 				} else {
 					ns.print(
