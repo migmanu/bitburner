@@ -128,7 +128,7 @@ export async function main(ns) {
 					`
 				)
 				// divide available server RAM by script requirement
-				var serverMaxRepetitions = Math.floor(serversArray[s][1] / secScriptRamUsage);
+				var serverMaxRepetitions = Math.floor(serversArray[0][1] / secScriptRamUsage);
 
 				// one or less servers needed
 				// rep diff must be larger than 0 to avoid invalid thread call
