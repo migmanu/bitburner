@@ -199,7 +199,6 @@ export async function main(ns) {
 
 		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
 		var growScriptTime = ns.getGrowTime(target);
-		//var growImpact = ns.growthAnalyze(1);
 
 		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
 		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
