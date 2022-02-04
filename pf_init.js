@@ -226,13 +226,25 @@ export async function main(ns) {
 
 		// calculate repetitions needed given available RAM
 
-		// get multiplier for growthAnalyze
-		var differenceToMaxMoney = serverMaxMoney - serverMoney;
-		
+		// get param for ns.growthAnalize() like: serverMoney * x = serverMaxMoney
+		var multiplierToMaxMoney = serverMaxMoney / serverMoney;
+		var growRepetitionsNeeded = ns.growthAnalize(target, multiplierToMaxMoney);
+
 
 		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
 		var growScriptTime = ns.getGrowTime(target);
 		//var growImpact = ns.growthAnalyze(1);
+
+		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
+		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
+			growServerRAM = serversArray[0][1];
+			growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
+
+			// one or less severs needed
+			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
+					
+			}
+		}
 
 
 		ns.print(`serversArray after sec loop: ${serversArray}`)
