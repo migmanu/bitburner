@@ -156,9 +156,9 @@ export async function main(ns) {
 					
 					// add server element to end of serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
-						var serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
+						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
 						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
-						var serverElement = [];
+						let serverElement = [];
 						serverElement.push(serversArray[0][0]);
 						serverElement.push(serverFreeRam);
 						serversArray.push(serverElement);
@@ -237,12 +237,26 @@ export async function main(ns) {
 
 		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
 		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
-			growServerRAM = serversArray[0][1];
-			growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
+			var growServerRAM = serversArray[0][1];
+			var growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
 
 			// one or less severs needed
 			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
-					
+				// execute grower on host server
+				ns.exec('GROWER', serversArray[0][0], growRepetitionsNeeded, target);
+
+				// apend updated used server to serversArray
+				if (growServerMaxRepetitions > growRepetitionsNeeded) {
+						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
+						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
+						let serverElement = [];
+						serverElement.push(serversArray[0][0]);
+						serverElement.push(serverFreeRam);
+						serversArray.push(serverElement);
+				}
+				
+				// delete first server from serversArray
+				serversArray.shift();
 			}
 		}
 
