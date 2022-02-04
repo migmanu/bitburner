@@ -237,11 +237,13 @@ export async function main(ns) {
 
 		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
 		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
+			ns.print('grow while loop init')
 			var growServerRAM = serversArray[0][1];
 			var growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
 
 			// one or less severs needed
 			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
+				ns.print('one or les grow servers needed')
 				// execute grower on host server
 				ns.exec('GROWER', serversArray[0][0], growRepetitionsNeeded, target);
 
@@ -255,8 +257,17 @@ export async function main(ns) {
 						serversArray.push(serverElement);
 				}
 				
-				// delete first server from serversArray
+				// delete first server object from serversArray
 				serversArray.shift();
+
+				if (growServerMaxRepetitions < growRepetitionsNeeded) {
+					ns.print('more than one grow server needed')
+					// execute grower on host server
+					ns.exec('GROWER', serversArray[0][0], growServerMaxRepetitions, target);
+
+					// delete first server object from serverArray
+					serversArray.shift();
+				}
 			}
 		}
 
