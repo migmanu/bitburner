@@ -30,6 +30,7 @@ TODO:
 	- add kill scripts on servers to avoid bugs?
 	- move sec variables into global while loop
 	- change sec while to if codnitional?
+	- eliminate repetition in sec if statements
 
  */
 export async function main(ns) {
@@ -219,13 +220,13 @@ export async function main(ns) {
 		}
 
 		
-		// GROWER //
+		// 								GROWER		 										//
+		//----------------------------------------------------------------------------------//
 
 		var serverMoney = ns.getServerMoneyAvailable(target);
 		var serverMaxMoney = ns.getServerMaxMoney(target);
 
 		// calculate repetitions needed given available RAM
-
 		// get param for ns.growthAnalize() like: serverMoney * x = serverMaxMoney
 		var multiplierToMaxMoney = serverMaxMoney / serverMoney;
 		var growRepetitionsNeeded = ns.growthAnalize(target, multiplierToMaxMoney);
@@ -257,22 +258,25 @@ export async function main(ns) {
 						serversArray.push(serverElement);
 				}
 				
-				// delete first server object from serversArray
-				serversArray.shift();
-
-				if (growServerMaxRepetitions < growRepetitionsNeeded) {
-					ns.print('more than one grow server needed')
-					// execute grower on host server
-					ns.exec('GROWER', serversArray[0][0], growServerMaxRepetitions, target);
-
-					// delete first server object from serverArray
-					serversArray.shift();
-				}
 			}
+
+			// more than one server needed
+			if (growServerMaxRepetitions < growRepetitionsNeeded) {
+				ns.print('more than one grow server needed')
+				// execute grower on host server
+				ns.exec('GROWER', serversArray[0][0], growServerMaxRepetitions, target);
+
+			}
+
+			// delete first server object from serverArray
+			serversArray.shift();
+
+			// add grow() time to offTime
+			offTime.push(growScriptTime);
 		}
 
 
-		ns.print(`serversArray after sec loop: ${serversArray}`)
+		ns.print(`serversArray after loops: ${serversArray}`)
 		// use sleep method to await until all scripts ran
 		if (offTime.length === 0) {
 			ns.print(`sec while loop exited without adding to offTime`)
