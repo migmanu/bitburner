@@ -79,6 +79,11 @@ export async function main(ns) {
 	while (true) {
 		ns.print("global while init");
 
+		// copy server array
+		// servers with no spare RAM after exec() call are taken out and servers with spare RAM are updated
+		var serversArray = builtServersArray.filter(() => true);
+
+
 		// 								SEC BREACHER 										//
 		//----------------------------------------------------------------------------------//
 		var secLevel = ns.getServerSecurityLevel(target);
@@ -97,14 +102,9 @@ export async function main(ns) {
 		
 		var secRepetitionsMade = 0; // updated on every exec() call with amount + 1 * threads
 
-		// copy server array
-		// servers with no spare RAM after exec() call are taken out and servers with spare RAM are updated
-		var serversArray = builtServersArray.filter(() => true);
-
-	
 		// stop loop when all servers busy
 		var availableServers = serversArray.length; // number of servers before serversArray is mutated
-		var usedSecServers = 0;
+		var usedSecServers = 0; // TODO: try to eliminate need for this variable
 
 		// while loop only if there are more repetitions needed AND servers available
 		while (secRepetitionsMade < secRepetitionsNeeded && usedSecServers < availableServers) {
@@ -116,17 +116,6 @@ export async function main(ns) {
 			// while secRepetitionDifference is larger than 0 to avoid pointless calling
 			var s = 0
 			while (s < availableServers && secRepetitionDifference > 0) {
-				ns.print(
-					`
-					server while init S: ${s};
-					sec array: ${serversArray};
-					length: ${serversArray.length};
-					reps needed: ${secRepetitionsNeeded};
-					rep diff: ${secRepetitionDifference}
-					sec script time: ${secScriptTime};
-					impact needed: ${secImpactNeeded};
-					`
-				)
 				// divide available server RAM by script requirement
 				var serverMaxRepetitions = Math.floor(serversArray[0][1] / secScriptRamUsage);
 
@@ -134,15 +123,6 @@ export async function main(ns) {
 				// rep diff must be larger than 0 to avoid invalid thread call
 				// AND rep diff must be equal or smaller to srv max reps to justify only one srv called
 				if (secRepetitionDifference > 0 && secRepetitionDifference <= serverMaxRepetitions) {
-					ns.print(`one or less servers needed`)
-					ns.print(
-						`
-						rep diff: ${secRepetitionDifference};
-						srv max reps: ${serverMaxRepetitions}
-						`
-						)
-					
-
 					// execute breacher
 					ns.exec("pf_breacher.js", serversArray[0][0], secRepetitionDifference, target, secLevelThreshold);
 
@@ -151,14 +131,10 @@ export async function main(ns) {
 					
 					// update repetition difference
 					secRepetitionDifference = 0;
-
-					
-
 					
 					// add server element to end of serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
 						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
-						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
 						let serverElement = [];
 						serverElement.push(serversArray[0][0]);
 						serverElement.push(serverFreeRam);
@@ -178,14 +154,12 @@ export async function main(ns) {
 					// more than one server needed
 					// srv max reps must be larger than 1 for valid thread call
 				} else if (serverMaxRepetitions >= 1) {
-					ns.print(`more than one server needed`);
 
 					// update repetition difference
 					secRepetitionDifference = secRepetitionDifference - serverMaxRepetitions;
 					
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
-					ns.print(`REPS MADE: ${secRepetitionsMade}`)
 					
 					// add time to offTime
 					offTime.push(secScriptTime)
@@ -200,17 +174,8 @@ export async function main(ns) {
 					serversArray.shift();
 
 				} else {
-					ns.print(
-						`
-						ERROR: script failed both if statements;
-						Reps made: ${secRepetitionsMade};
-						reps needed: ${secRepetitionsNeeded};
-						Rep diff: ${secRepetitionDifference}:
-						srv max reps: ${serverMaxRepetitions};
-						Used sec srv: ${usedSecServers}
-						`
-					);
-					// add tim to offTime
+					// TODO: try to eliminate need for this else statement
+					// add time to offTime
 					offTime.push(secScriptTime)
 					usedSecServers++;
 					secRepetitionsMade = secRepetitionsMade + 100;
