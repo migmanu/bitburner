@@ -39,8 +39,7 @@ export async function main(ns) {
 	var target = ns.args[0];
 
 	// general variables
-	var hostServer = ns.getHostname();
-	var filesToCopy = ["pf_breacher.js"]
+	var filesToCopy = ['pf_breacher.js', 'grower.js', 'hacker.js']
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	
@@ -68,12 +67,6 @@ export async function main(ns) {
 		await ns.scp(filesToCopy, srv[0]);
 	}
 
-	
-	// SEC BREACHER VARIABLES //
-
-	
-	
-	
 
 	// while loop for all scripts	
 	while (true) {
@@ -194,7 +187,7 @@ export async function main(ns) {
 		// calculate repetitions needed given available RAM
 		// get param for ns.growthAnalize() like: serverMoney * x = serverMaxMoney
 		var multiplierToMaxMoney = serverMaxMoney / serverMoney;
-		var growRepetitionsNeeded = ns.growthAnalize(target, multiplierToMaxMoney);
+		var growRepetitionsNeeded = ns.growthAnalyze(target, multiplierToMaxMoney);
 
 
 		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
@@ -212,9 +205,12 @@ export async function main(ns) {
 				// execute grower on host server
 				ns.exec('GROWER', serversArray[0][0], growRepetitionsNeeded, target);
 
+				// update growRepetitionsNeeded to avoid endless loop
+				growRepetitionsNeeded = 0;
+
 				// apend updated used server to serversArray
 				if (growServerMaxRepetitions > growRepetitionsNeeded) {
-						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
+						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
 						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
 						let serverElement = [];
 						serverElement.push(serversArray[0][0]);
@@ -229,6 +225,9 @@ export async function main(ns) {
 				ns.print('more than one grow server needed')
 				// execute grower on host server
 				ns.exec('GROWER', serversArray[0][0], growServerMaxRepetitions, target);
+
+				// update growRepetitionsNeeded to avoid enldess loopp
+				growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
 
 			}
 
