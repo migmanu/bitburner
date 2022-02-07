@@ -27,10 +27,10 @@ The script works with a global while loop that calls nested loops as needed. The
 
 
 TODO: 
-	- add kill scripts on servers to avoid bugs?
-	- move sec variables into global while loop
-	- change sec while to if codnitional?
-	- eliminate repetition in sec if statements
+	[] add kill scripts on servers to avoid bugs?
+	[x] move sec variables into global while loop
+	[] change sec while to if codnitional?
+	[] eliminate repetition in sec if statements
 
  */
 export async function main(ns) {
@@ -76,7 +76,8 @@ export async function main(ns) {
 		// servers with no spare RAM after exec() call are taken out and servers with spare RAM are updated
 		var serversArray = builtServersArray.filter(() => true);
 
-
+		// list of script exec times. Higher is chosen at end of loop for sleep() method. 
+		var offTime = []; // time for sleep method in milliseconds
 		// 								SEC BREACHER 										//
 		//----------------------------------------------------------------------------------//
 		var secLevel = ns.getServerSecurityLevel(target);
@@ -86,12 +87,10 @@ export async function main(ns) {
 
 		// calculate repetitions needed given server's total RAM
 		var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
-		var secScriptTime = ns.getWeakenTime(target);
 		var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
 		var secImpactNeeded = (secLevel - secLevelThreshold);
 		var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
 
-		var offTime = [secScriptTime]; // time for sleep method in milliseconds
 		
 		var secRepetitionsMade = 0; // updated on every exec() call with amount + 1 * threads
 
@@ -101,7 +100,10 @@ export async function main(ns) {
 
 		// while loop only if there are more repetitions needed AND servers available
 		while (secRepetitionsMade < secRepetitionsNeeded && usedSecServers < availableServers) {
-			
+		
+			// add sec script time to offTime
+			offTime.push(ns.getWeakenTime(target));
+
 			var secRepetitionDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
 			
 			// server while loop
@@ -137,9 +139,6 @@ export async function main(ns) {
 					// remove first server element element from serverArray
 					serversArray.shift();
 					
-					// add time to offTime
-					offTime.push(secScriptTime)
-
 					// add to used sec severs
 					usedSecServers++;
 
@@ -154,9 +153,6 @@ export async function main(ns) {
 					// add to repetitions made
 					secRepetitionsMade = secRepetitionsMade + serverMaxRepetitions;
 					
-					// add time to offTime
-					offTime.push(secScriptTime)
-										
 					// add to use sec severs
 					usedSecServers++;
 
@@ -168,8 +164,6 @@ export async function main(ns) {
 
 				} else {
 					// TODO: try to eliminate need for this else statement
-					// add time to offTime
-					offTime.push(secScriptTime)
 					usedSecServers++;
 					secRepetitionsMade = secRepetitionsMade + 100;
 				}
@@ -191,7 +185,6 @@ export async function main(ns) {
 
 
 		var growScriptRAMusage = ns.getScriptRam(filesToCopy[1]);
-		var growScriptTime = ns.getGrowTime(target);
 
 		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
 		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
@@ -237,7 +230,7 @@ export async function main(ns) {
 			serversArray.shift();
 
 			// add grow() time to offTime
-			offTime.push(growScriptTime);
+			offTime.push(ns.getGrowTime(target));
 		}
 
 
@@ -247,7 +240,8 @@ export async function main(ns) {
 			ns.print(`sec while loop exited without adding to offTime`)
 			ns.exit()
 		}
-		await ns.sleep(offTime[0])
+		// select longest exec time from used scripts and sleep
+		await ns.sleep(Math.max(offTime))
 
 		
 	}
