@@ -203,7 +203,7 @@ export async function main(ns) {
 			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
 				ns.print('one or les grow servers needed')
 				// execute grower on host server
-				ns.exec('GROWER', serversArray[0][0], growRepetitionsNeeded, target);
+				ns.exec(filesToCopy[1], serversArray[0][0], growRepetitionsNeeded, target);
 
 				// update growRepetitionsNeeded to avoid endless loop
 				growRepetitionsNeeded = 0;
@@ -224,7 +224,7 @@ export async function main(ns) {
 			if (growServerMaxRepetitions < growRepetitionsNeeded) {
 				ns.print('more than one grow server needed')
 				// execute grower on host server
-				ns.exec('GROWER', serversArray[0][0], growServerMaxRepetitions, target);
+				ns.exec(filesToCopy[1], serversArray[0][0], growServerMaxRepetitions, target);
 
 				// update growRepetitionsNeeded to avoid enldess loopp
 				growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
