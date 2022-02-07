@@ -39,7 +39,7 @@ export async function main(ns) {
 	var target = ns.args[0];
 
 	// general variables
-	var filesToCopy = ['pf_breacher.js', 'grower.js', 'hacker.js']
+	var filesToCopy = ['pf_breacher.js', 'pf_grower.js', 'hacker.js']
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	
@@ -127,7 +127,7 @@ export async function main(ns) {
 					
 					// add server element to end of serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
-						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0]) - ns.getServerUsedRam(serversArray[0]));;
+						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
 						let serverElement = [];
 						serverElement.push(serversArray[0][0]);
 						serverElement.push(serverFreeRam);
@@ -190,18 +190,20 @@ export async function main(ns) {
 		var growRepetitionsNeeded = ns.growthAnalyze(target, multiplierToMaxMoney);
 
 
-		var growScriptRAMusage = ns.getScriptRam("SCRIPT");
+		var growScriptRAMusage = ns.getScriptRam(filesToCopy[1]);
 		var growScriptTime = ns.getGrowTime(target);
 
 		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
 		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
-			ns.print('grow while loop init')
+			ns.print('grow while loop init');
+			ns.print(`grow reps needed: ${growRepetitionsNeeded}`);
 			var growServerRAM = serversArray[0][1];
 			var growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
+			ns.print(`first server max reps: ${growServerMaxRepetitions}`);
 
 			// one or less severs needed
 			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
-				ns.print('one or les grow servers needed')
+				ns.print('one or less grow servers needed')
 				// execute grower on host server
 				ns.exec(filesToCopy[1], serversArray[0][0], growRepetitionsNeeded, target);
 
