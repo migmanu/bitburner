@@ -102,7 +102,7 @@ export async function main(ns) {
 		while (secRepetitionsMade < secRepetitionsNeeded && usedSecServers < availableServers) {
 		
 			// add sec script time to offTime
-			offTime.push(ns.getWeakenTime(target));
+			offTime.push(Math.ceil(ns.getWeakenTime(target)));
 
 			var secRepetitionDifference = Math.floor(secRepetitionsNeeded - secRepetitionsMade);
 			
@@ -186,61 +186,69 @@ export async function main(ns) {
 
 		var growScriptRAMusage = ns.getScriptRam(filesToCopy[1]);
 
-		// execute grower when serverMoney < serverMaxMoney and there are unused servers and growRepetitionsNeeded > 0
-		while (multiplierToMaxMoney >= 1 & serversArray.length > 0 & growRepetitionsNeeded > 0) {
-			ns.print('grow while loop init');
+		// execute grower when serverMoney < serverMaxMoney
+		if (multiplierToMaxMoney >= 1) {
+			ns.print('grow if statement init');
 			ns.print(`grow reps needed: ${growRepetitionsNeeded}`);
 			var growServerRAM = serversArray[0][1];
 			var growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
 			ns.print(`first server max reps: ${growServerMaxRepetitions}`);
 
-			// one or less severs needed
-			if (growServerMaxRepetitions >= growRepetitionsNeeded) {
-				ns.print('one or less grow servers needed')
-				// execute grower on host server
-				ns.exec(filesToCopy[1], serversArray[0][0], growRepetitionsNeeded, target);
+			// add grow() time to offTime
+			ns.print(`grow exec time is  ${ns.getGrowTime(target)}`)
+			offTime.push(Math.ceil(ns.getGrowTime(target)));
 
-				// update growRepetitionsNeeded to avoid endless loop
-				growRepetitionsNeeded = 0;
+			// grow server while loop only if there are still elements in serversArray and reps needed
+			grower_while_loop:
+			while (serversArray.length > 0 & growRepetitionsNeeded > 0) {
+				
+				let firstServer = serversArray.shift();
+				ns.print(`firstServer: ${firstServer}`)
 
-				// apend updated used server to serversArray
-				if (growServerMaxRepetitions > growRepetitionsNeeded) {
-						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
-						ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
-						let serverElement = [];
-						serverElement.push(serversArray[0][0]);
-						serverElement.push(serverFreeRam);
-						serversArray.push(serverElement);
+				// one or less severs needed
+				if (growServerMaxRepetitions >= growRepetitionsNeeded) {
+					ns.print('one or less grow servers needed')
+					// execute grower on host server
+					ns.exec(filesToCopy[1], serversArray[0][0], growRepetitionsNeeded, target);
+
+					// update growRepetitionsNeeded to avoid endless loop
+					growRepetitionsNeeded = 0;
+
+					// apend updated used server to serversArray if RAM unused
+					if (growServerMaxRepetitions > growRepetitionsNeeded) {
+							let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
+							ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
+							let serverElement = [];
+							serverElement.push(serversArray[0][0]);
+							serverElement.push(serverFreeRam);
+							serversArray.push(serverElement);
+					}
+					
+				}
+
+				// more than one server needed
+				if (growServerMaxRepetitions < growRepetitionsNeeded) {
+					ns.print('more than one grow server needed')
+					// execute grower on host server
+					ns.exec(filesToCopy[1], serversArray[0][0], growServerMaxRepetitions, target);
+
+					// update growRepetitionsNeeded to avoid enldess loopp
+					growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
+
 				}
 				
+				// delete first server object from serverArray
+				serversArray.shift();
 			}
+			
 
-			// more than one server needed
-			if (growServerMaxRepetitions < growRepetitionsNeeded) {
-				ns.print('more than one grow server needed')
-				// execute grower on host server
-				ns.exec(filesToCopy[1], serversArray[0][0], growServerMaxRepetitions, target);
-
-				// update growRepetitionsNeeded to avoid enldess loopp
-				growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
-
-			}
-
-			// delete first server object from serverArray
-			serversArray.shift();
-
-			// add grow() time to offTime
-			offTime.push(ns.getGrowTime(target));
+			
 		}
-
 
 		ns.print(`serversArray after loops: ${serversArray}`)
 		// use sleep method to await until all scripts ran
-		if (offTime.length === 0) {
-			ns.print(`sec while loop exited without adding to offTime`)
-			ns.exit()
-		}
 		// select longest exec time from used scripts and sleep
+		ns.print(`offTime is: ${offTime} max is: ${Math.max(offTime)}`)
 		await ns.sleep(Math.max(offTime))
 
 		
