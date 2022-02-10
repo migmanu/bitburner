@@ -55,18 +55,7 @@ export async function main(ns) {
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	
-	// SERVER LIST BUILDER //
-
-	// creates array with elements arrays formated: [serverName, serverRAM]
-    // input: purchasedServersArray
-	var builtServersArray = [];
-	for (const srv of purchasedServersArray) {
-		let serverInfo = [];
-		let serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
-		serverInfo.push(srv);
-		serverInfo.push(serverFreeRam);
-		serverFreeRam > 1 ? builtServersArray.push(serverInfo) : ns.print('server has no free RAM');
-	}
+	
 
 
 
@@ -81,12 +70,24 @@ export async function main(ns) {
 	while (true) {
 		ns.print("global while init");
 
-		// copy server array
-		// servers with no spare RAM after exec() call are taken out and servers with spare RAM are updated
-		var serversArray = builtServersArray.filter(() => true);
+
+		// SERVER LIST BUILDER //
+		// creates array of server element arrays formated: [serverName, serverRAM]
+ 	 	// input: purchasedServersArray
+		// TODO: add servers only if available ram equal or higher than lower ram needed for any script
+		var serversArray = [];
+		for (const srv of purchasedServersArray) {
+			let serverInfo = [];
+			let serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
+			serverInfo.push(srv);
+			serverInfo.push(serverFreeRam);
+			serverFreeRam > 1 ? serversArray.push(serverInfo) : ns.print('server has no free RAM');
+		}
 
 		// list of script exec times. Higher is chosen at end of loop for sleep() method. 
 		var offTime = []; // time for sleep method in milliseconds
+
+
 		// 								SEC BREACHER 										//
 		//----------------------------------------------------------------------------------//
 		var secLevel = ns.getServerSecurityLevel(target);
