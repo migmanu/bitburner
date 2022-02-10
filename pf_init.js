@@ -15,16 +15,15 @@ PirateFarmer uses the following associated files (load order is important):
 - pf_hacker.js 
 
 Used files are stored in filesToUse variable.
-IMPORTANT: If any file name is changed, this script must be updated accodingly.
+IMPORTANT: If any file name is changed, this script must be updated accordingly.
 
+SCRIPT STRUCTURE:
 The script works with a global while loop that calls nested loops as needed. The structure of the script is:
 
-- argument passed on script call
+- argument passed on script call: target server
 - general variables
 - server list builder
 - script paster
-- sec variables
-- grow variables
 - global while loop
 	- sec breacher
 		- security while loop
