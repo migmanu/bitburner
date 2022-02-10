@@ -59,15 +59,12 @@ export async function main(ns) {
 
 	// creates array with elements arrays formated: [serverName, serverRAM]
     // input: purchasedServersArray
-	// creates totalServerRAM with sum of array's servers RAM
 	var builtServersArray = [];
-	var totalServersRAM = 0;
 	for (const srv of purchasedServersArray) {
 		var serverInfo = [];
 		var serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
 		serverInfo.push(srv);
 		serverInfo.push(serverFreeRam);
-		totalServersRAM = totalServersRAM + serverFreeRam;
 		builtServersArray.push(serverInfo);
 	}
 
@@ -214,7 +211,6 @@ export async function main(ns) {
 				
 				// extract first server element and get max reps
 				let firstServer = serversArray.shift();
-				ns.print(`firstServer: ${firstServer}`)
 				let growServerRAM = firstServer[1];
 				let growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
 				ns.print(`first server max reps: ${growServerMaxRepetitions}`);
@@ -222,6 +218,7 @@ export async function main(ns) {
 				// one or less severs needed
 				if (growServerMaxRepetitions >= growRepetitionsNeeded) {
 					ns.print('one or less grow servers needed')
+					ns.print(`repetitions needed: ${growRepetitionsNeeded}`)
 					// execute grower on host server
 					ns.exec(filesToUse[1], firstServer[0], growRepetitionsNeeded, target);
 
@@ -243,11 +240,13 @@ export async function main(ns) {
 				// more than one server needed
 				if (growServerMaxRepetitions < growRepetitionsNeeded) {
 					ns.print('more than one grow server needed')
+					ns.print(`repetitions needed: ${growRepetitionsNeeded}`)
 					// execute grower on host server
 					ns.exec(filesToUse[1], firstServer[0], growServerMaxRepetitions, target);
 
 					// update growRepetitionsNeeded to avoid enldess loopp
 					growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
+					ns.print(`repetitions needed after exec: ${growRepetitionsNeeded}`)
 
 				}
 			}
@@ -256,10 +255,8 @@ export async function main(ns) {
 			
 		}
 
-		ns.print(`serversArray after loops (empty if all srvs fully used): ${serversArray}`)
 		// use sleep method to await until all scripts ran
 		// select longest exec time from used scripts and sleep
-		ns.print(`offTime is: ${offTime} max is: ${Math.max( ...offTime )}`)
 		await ns.sleep( ...offTime );
 
 		
