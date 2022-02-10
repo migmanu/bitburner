@@ -43,6 +43,7 @@ TODO:
 	[] change sec while to if codnitional?
 	[] eliminate repetition in sec if statements
 	[] create function to evaluate conditions and execute scripts for all three steps
+	[] rewrite sec breacher to simplify it
 
  */
 export async function main(ns) {
@@ -229,7 +230,6 @@ export async function main(ns) {
 					// apend updated used server to serversArray if RAM unused
 					if (growServerMaxRepetitions > growRepetitionsNeeded) {
 							let growServerFreeRam = serversArray[0][1];
-							ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
 							let serverElement = [];
 							serverElement.push(serversArray[0][0]);
 							serverElement.push(growServerFreeRam);
