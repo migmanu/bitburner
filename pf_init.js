@@ -55,17 +55,6 @@ export async function main(ns) {
 	var filesToUse = ['pf_breacher.js', 'pf_grower.js', 'hacker.js']
 	var purchasedServersArray = ns.getPurchasedServers();
 
-	
-	
-
-
-
-	// SCRIPT PASTER //
-
-	for (const srv of builtServersArray) {
-		await ns.scp(filesToUse, srv[0]);
-	}
-
 
 	// while loop for all scripts	
 	while (true) {
@@ -83,6 +72,7 @@ export async function main(ns) {
 			serverInfo.push(srv);
 			serverInfo.push(serverFreeRam);
 			serverFreeRam > 1 ? serversArray.push(serverInfo) : ns.print('server has no free RAM');
+			ns.scp(filesToUse, serverInfo[0]);
 		}
 
 		// list of script exec times. Higher is chosen at end of loop for sleep() method. 
@@ -258,7 +248,7 @@ export async function main(ns) {
 
 		// use sleep method to await until all scripts ran
 		// select longest exec time from used scripts and sleep
-		await ns.sleep( ...offTime );
+		await ns.sleep(100);
 
 		
 	}
