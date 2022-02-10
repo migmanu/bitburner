@@ -248,11 +248,11 @@ export async function main(ns) {
 			
 		}
 
-		ns.print(`serversArray after loops: ${serversArray}`)
+		ns.print(`serversArray after loops (empty if all srvs fully used): ${serversArray}`)
 		// use sleep method to await until all scripts ran
 		// select longest exec time from used scripts and sleep
-		ns.print(`offTime is: ${offTime} max is: ${Math.max(offTime)}`)
-		await ns.sleep(Math.max(offTime))
+		ns.print(`offTime is: ${offTime} max is: ${Math.max( ...offTime )}`)
+		await ns.sleep( ...offTime );
 
 		
 	}
