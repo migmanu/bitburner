@@ -139,10 +139,10 @@ export async function main(ns) {
 					
 					// add server element to end of serverArray only if server has RAM unused
 					if (serverMaxRepetitions < secRepetitionsNeeded) {
-						let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
+						let secServerFreeRam = serversArray[0][1];
 						let serverElement = [];
 						serverElement.push(serversArray[0][0]);
-						serverElement.push(serverFreeRam);
+						serverElement.push(secServerFreeRam);
 						serversArray.push(serverElement);
 					}
 
@@ -228,11 +228,11 @@ export async function main(ns) {
 
 					// apend updated used server to serversArray if RAM unused
 					if (growServerMaxRepetitions > growRepetitionsNeeded) {
-							let serverFreeRam = Math.floor(ns.getServerMaxRam(serversArray[0][0]) - ns.getServerUsedRam(serversArray[0][0]));;
+							let growServerFreeRam = serversArray[0][1];
 							ns.print(`${serversArray[0]} has ${serverFreeRam} available RAM`);
 							let serverElement = [];
 							serverElement.push(serversArray[0][0]);
-							serverElement.push(serverFreeRam);
+							serverElement.push(growServerFreeRam);
 							serversArray.push(serverElement);
 					}
 					
