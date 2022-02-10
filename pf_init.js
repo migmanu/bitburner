@@ -65,7 +65,7 @@ export async function main(ns) {
 		let serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
 		serverInfo.push(srv);
 		serverInfo.push(serverFreeRam);
-		builtServersArray.push(serverInfo);
+		serverFreeRam > 1 ? builtServersArray.push(serverInfo) : ns.print('server has no free RAM');
 	}
 
 
