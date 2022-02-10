@@ -190,9 +190,7 @@ export async function main(ns) {
 		if (multiplierToMaxMoney >= 1) {
 			ns.print('grow if statement init');
 			ns.print(`grow reps needed: ${growRepetitionsNeeded}`);
-			var growServerRAM = serversArray[0][1];
-			var growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
-			ns.print(`first server max reps: ${growServerMaxRepetitions}`);
+			
 
 			// add grow() time to offTime
 			ns.print(`grow exec time is  ${ns.getGrowTime(target)}`)
@@ -202,14 +200,18 @@ export async function main(ns) {
 			grower_while_loop:
 			while (serversArray.length > 0 & growRepetitionsNeeded > 0) {
 				
+				// extract first server element and get max reps
 				let firstServer = serversArray.shift();
 				ns.print(`firstServer: ${firstServer}`)
+				let growServerRAM = firstServer[1];
+				let growServerMaxRepetitions = Math.floor(growServerRAM / growScriptRAMusage);
+				ns.print(`first server max reps: ${growServerMaxRepetitions}`);
 
 				// one or less severs needed
 				if (growServerMaxRepetitions >= growRepetitionsNeeded) {
 					ns.print('one or less grow servers needed')
 					// execute grower on host server
-					ns.exec(filesToCopy[1], serversArray[0][0], growRepetitionsNeeded, target);
+					ns.exec(filesToCopy[1], firstServer[0], growRepetitionsNeeded, target);
 
 					// update growRepetitionsNeeded to avoid endless loop
 					growRepetitionsNeeded = 0;
