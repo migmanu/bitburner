@@ -236,15 +236,12 @@ export async function main(ns) {
 				if (growServerMaxRepetitions < growRepetitionsNeeded) {
 					ns.print('more than one grow server needed')
 					// execute grower on host server
-					ns.exec(filesToCopy[1], serversArray[0][0], growServerMaxRepetitions, target);
+					ns.exec(filesToCopy[1], firstServer[0], growServerMaxRepetitions, target);
 
 					// update growRepetitionsNeeded to avoid enldess loopp
 					growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
 
 				}
-				
-				// delete first server object from serverArray
-				serversArray.shift();
 			}
 			
 
