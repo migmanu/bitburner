@@ -190,7 +190,7 @@ export async function main(ns) {
 		// calculate repetitions needed given available RAM
 		// get param for ns.growthAnalize() like: serverMoney * x = serverMaxMoney
 		var multiplierToMaxMoney = serverMaxMoney / serverMoney;
-		var growRepetitionsNeeded = ns.growthAnalyze(target, multiplierToMaxMoney);
+		var growRepetitionsNeeded = Math.floor(ns.growthAnalyze(target, multiplierToMaxMoney));
 
 
 		var growScriptRAMusage = ns.getScriptRam(filesToUse[1]);
