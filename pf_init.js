@@ -61,8 +61,8 @@ export async function main(ns) {
     // input: purchasedServersArray
 	var builtServersArray = [];
 	for (const srv of purchasedServersArray) {
-		var serverInfo = [];
-		var serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
+		let serverInfo = [];
+		let serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
 		serverInfo.push(srv);
 		serverInfo.push(serverFreeRam);
 		builtServersArray.push(serverInfo);
