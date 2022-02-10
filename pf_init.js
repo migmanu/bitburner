@@ -1,11 +1,20 @@
 /** @param {NS} ns **/
 
 /*
-Welcome to my pirate farmer script. Instructions in paragraph. This script is intended to be run 
-from your home server. It will copy pf_breacher.js to all your bought servers and farm a target 
-server. It will do this trying to make as efficient use of available RAM as possible.
+Welcome to my PirateFarmer script! Read the instructions for better results. 
 
-It will use the following associated files: pf_breacher.js, pf_grower.js, pf_hacker,js 
+SUMMARY:
+This script is intended to be run from your home server. It will copy pf_breacher.js to 
+all passed servers and farm a target server. Initially it will only work on user bought servers. 
+It will do this trying to make as efficient use of available RAM as possible.
+
+REQUIRED FILES:
+PirateFarmer uses the following associated files (load order is important): 
+- pf_breacher.js
+- pf_grower.js
+- pf_hacker.js 
+
+Used files are stored in filesToUse variable.
 IMPORTANT: If any file name is changed, this script must be updated accodingly.
 
 The script works with a global while loop that calls nested loops as needed. The structure of the script is:
@@ -43,7 +52,7 @@ export async function main(ns) {
 	var target = ns.args[0];
 
 	// general variables
-	var filesToCopy = ['pf_breacher.js', 'pf_grower.js', 'hacker.js']
+	var filesToUse = ['pf_breacher.js', 'pf_grower.js', 'hacker.js']
 	var purchasedServersArray = ns.getPurchasedServers();
 
 	
@@ -68,7 +77,7 @@ export async function main(ns) {
 	// SCRIPT PASTER //
 
 	for (const srv of builtServersArray) {
-		await ns.scp(filesToCopy, srv[0]);
+		await ns.scp(filesToUse, srv[0]);
 	}
 
 
@@ -123,7 +132,7 @@ export async function main(ns) {
 				// AND rep diff must be equal or smaller to srv max reps to justify only one srv called
 				if (secRepetitionDifference > 0 && secRepetitionDifference <= serverMaxRepetitions) {
 					// execute breacher
-					ns.exec("pf_breacher.js", serversArray[0][0], secRepetitionDifference, target, secLevelThreshold);
+					ns.exec(filesToUse[0], serversArray[0][0], secRepetitionDifference, target, secLevelThreshold);
 
 					// update secRepetitionsMade
 					secRepetitionsMade = secRepetitionsNeeded;
@@ -161,7 +170,7 @@ export async function main(ns) {
 					usedSecServers++;
 
 					// execute breacher
-					ns.exec("pf_breacher.js", serversArray[0][0], serverMaxRepetitions, target, secLevelThreshold);
+					ns.exec(filesToUse[0], serversArray[0][0], serverMaxRepetitions, target, secLevelThreshold);
 					
 					// remove server element element from serverArray
 					serversArray.shift();
@@ -188,7 +197,7 @@ export async function main(ns) {
 		var growRepetitionsNeeded = ns.growthAnalyze(target, multiplierToMaxMoney);
 
 
-		var growScriptRAMusage = ns.getScriptRam(filesToCopy[1]);
+		var growScriptRAMusage = ns.getScriptRam(filesToUse[1]);
 
 		// execute grower when serverMoney < serverMaxMoney
 		if (multiplierToMaxMoney >= 1) {
@@ -215,7 +224,7 @@ export async function main(ns) {
 				if (growServerMaxRepetitions >= growRepetitionsNeeded) {
 					ns.print('one or less grow servers needed')
 					// execute grower on host server
-					ns.exec(filesToCopy[1], firstServer[0], growRepetitionsNeeded, target);
+					ns.exec(filesToUse[1], firstServer[0], growRepetitionsNeeded, target);
 
 					// update growRepetitionsNeeded to avoid endless loop
 					growRepetitionsNeeded = 0;
@@ -236,7 +245,7 @@ export async function main(ns) {
 				if (growServerMaxRepetitions < growRepetitionsNeeded) {
 					ns.print('more than one grow server needed')
 					// execute grower on host server
-					ns.exec(filesToCopy[1], firstServer[0], growServerMaxRepetitions, target);
+					ns.exec(filesToUse[1], firstServer[0], growServerMaxRepetitions, target);
 
 					// update growRepetitionsNeeded to avoid enldess loopp
 					growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
