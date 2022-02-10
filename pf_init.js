@@ -24,6 +24,9 @@ The script works with a global while loop that calls nested loops as needed. The
 				- if statement for more than one server needed
 				- if statement to catch errors
 	- grower
+		- grower_while_loop
+			- if one or less servers needed
+			- more than one server needed
 
 
 TODO: 
@@ -31,6 +34,7 @@ TODO:
 	[x] move sec variables into global while loop
 	[] change sec while to if codnitional?
 	[] eliminate repetition in sec if statements
+	[] create function to evaluate conditions and execute scripts for all three steps
 
  */
 export async function main(ns) {
