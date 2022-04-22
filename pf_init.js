@@ -40,7 +40,7 @@ The script works with a global while loop that calls nested loops as needed. The
 TODO: 
 	[] add kill scripts on servers to avoid bugs?
 	[x] move sec variables into global while loop
-	[] change sec while to if codnitional?
+	[] change sec while to if conditional?
 	[] eliminate repetition in sec if statements
 	[] create function to evaluate conditions and execute scripts for all three steps
 	[] rewrite sec breacher to simplify it
@@ -62,7 +62,8 @@ export async function main(ns) {
 
 
 		// SERVER LIST BUILDER //
-		// creates array of server element arrays formated: [serverName, serverRAM]
+		// creates array of server element arrays formatted: [serverName, serverRAM]
+		// pasts used files into provided servers
  	 	// input: purchasedServersArray
 		// TODO: add servers only if available ram equal or higher than lower ram needed for any script
 		var serversArray = [];
@@ -72,7 +73,7 @@ export async function main(ns) {
 			serverInfo.push(srv);
 			serverInfo.push(serverFreeRam);
 			serverFreeRam > 1 ? serversArray.push(serverInfo) : ns.print('server has no free RAM');
-			ns.scp(filesToUse, serverInfo[0]);
+			await ns.scp(filesToUse, serverInfo[0]);
 		}
 
 		// list of script exec times. Higher is chosen at end of loop for sleep() method. 
@@ -235,14 +236,24 @@ export async function main(ns) {
 					// execute grower on host server
 					ns.exec(filesToUse[1], firstServer[0], growServerMaxRepetitions, target);
 
-					// update growRepetitionsNeeded to avoid enldess loopp
+					// update growRepetitionsNeeded to avoid endless loop
 					growRepetitionsNeeded = growRepetitionsNeeded - growServerMaxRepetitions;
 					ns.print(`repetitions needed after exec: ${growRepetitionsNeeded}`)
 
 				}
 			}
 			
+		// 								HACKER		 										//
+		//----------------------------------------------------------------------------------//
+		
+		// variables
 
+		// if starter statement
+
+		for (const srv of serversArray) {
+			let hackServerRAM = srv[1];
+			let hackServerThreads = 0
+		}
 			
 		}
 
