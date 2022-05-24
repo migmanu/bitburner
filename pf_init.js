@@ -11,13 +11,13 @@ user bought servers.
 It will do this trying to make as efficient use of available RAM as possible.
 
 REQUIRED FILES:
-PirateFarmer uses the following associated files (load order is important): 
+PirateFarmer uses the following associated files: 
 - pf_breacher.js
 - pf_grower.js
 - pf_hacker.js 
 
 Used files are stored in filesToUse variable.
-IMPORTANT: If any file name is changed, this script must be updated accordingly.
+IMPORTANT: If any file name is changed, this script must be updated accordingly. Load order must be respected
 
 SCRIPT STRUCTURE:
 The script works with a global while loop that calls nested loops as needed. The structure of the script is:
@@ -86,23 +86,22 @@ export async function main(ns) {
 
 		// 								SEC BREACHER 										//
 		//----------------------------------------------------------------------------------//
+
+		// control variables //
 		var secLevel = ns.getServerSecurityLevel(target);
-		
 		// min sec level until which weaken() is called. Default is server min sec level
 		var secLevelThreshold = ns.getServerMinSecurityLevel(target); 
-
-		// calculate repetitions needed given server's total RAM
-		var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
-		var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken using only one thread
-		var secImpactNeeded = (secLevel - secLevelThreshold);
-		var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
-
-		
+		var availableServers = serversArray.length;
+		var usedSecServers = 0; // TODO: try to eliminate need for this variable
 		var secRepetitionsMade = 0; // updated on every exec() call with amount + 1 * threads
 
-		// stop loop when all servers busy
-		var availableServers = serversArray.length; // number of servers before serversArray is mutated
-		var usedSecServers = 0; // TODO: try to eliminate need for this variable
+		// repetitions calculator //
+		// get amount of pf_breacher.js executions needed until secLevelThreshold is reached
+		var secScriptRamUsage = ns.getScriptRam("pf_breacher.js");
+		var secScriptImpact = ns.weakenAnalyze(1) // impact of weaken() using only one thread
+		var secImpactNeeded = (secLevel - secLevelThreshold);
+		var secRepetitionsNeeded = Math.ceil(secImpactNeeded / secScriptImpact);
+		
 
 		// while loop only if there are more repetitions needed AND servers available
 		while (secRepetitionsMade < secRepetitionsNeeded && usedSecServers < availableServers) {
