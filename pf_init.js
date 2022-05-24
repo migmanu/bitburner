@@ -5,7 +5,9 @@ Welcome to my PirateFarmer script! Read the instructions for better results.
 
 SUMMARY:
 This script is intended to be run from your home server. It will copy pf_breacher.js to 
-all passed servers and farm a target server. Initially it will only work on user bought servers. 
+all passed servers and use them to farm a target server. Initially it will only work on 
+user bought servers. 
+
 It will do this trying to make as efficient use of available RAM as possible.
 
 REQUIRED FILES:
@@ -22,9 +24,8 @@ The script works with a global while loop that calls nested loops as needed. The
 
 - argument passed on script call: target server
 - general variables
-- server list builder
-- script paster
 - global while loop
+	- server list builder
 	- sec breacher
 		- security while loop
 			- server while loop
@@ -56,15 +57,16 @@ export async function main(ns) {
 	var purchasedServersArray = ns.getPurchasedServers();
 
 
-	// while loop for all scripts	
+	// global while loop //
 	while (true) {
 		ns.print("global while init");
 
 
 		// SERVER LIST BUILDER //
 		// creates array of server element arrays formatted: [serverName, serverRAM]
-		// pasts used files into provided servers
+		// copy used files into provided servers
  	 	// input: purchasedServersArray
+		// output: serversArray
 		// TODO: add servers only if available ram equal or higher than lower ram needed for any script
 		var serversArray = [];
 		for (const srv of purchasedServersArray) {
@@ -72,11 +74,13 @@ export async function main(ns) {
 			let serverFreeRam = Math.floor(ns.getServerMaxRam(srv) - ns.getServerUsedRam(srv));
 			serverInfo.push(srv);
 			serverInfo.push(serverFreeRam);
-			serverFreeRam > 1 ? serversArray.push(serverInfo) : ns.print('server has no free RAM');
+			// only add server if available RAM is higher than 1
+			serverFreeRam > 1 ? serversArray.push(serverInfo) : ns.print(`server ${srv} has no free RAM`);
 			await ns.scp(filesToUse, serverInfo[0]);
 		}
 
-		// list of script exec times. Higher is chosen at end of loop for sleep() method. 
+		// list of script execution times. Times will be registered here when scripts are used. Higher
+		// will be chosen for duration of sleep method 
 		var offTime = []; // time for sleep method in milliseconds
 
 
@@ -84,7 +88,7 @@ export async function main(ns) {
 		//----------------------------------------------------------------------------------//
 		var secLevel = ns.getServerSecurityLevel(target);
 		
-		// max sec level until which weaken() is called. Default is server min sec level
+		// min sec level until which weaken() is called. Default is server min sec level
 		var secLevelThreshold = ns.getServerMinSecurityLevel(target); 
 
 		// calculate repetitions needed given server's total RAM
