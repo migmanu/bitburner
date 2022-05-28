@@ -23,8 +23,15 @@ export async function main(ns) {
         return
     }
 
-    const serversToBuy = ns.
+    const serversToBuy = Math.floor(maxMoneyToUse / serverCost)
 
-    ns.print(serverCost)
+    if (!await ns.prompt(`With this money you can get ${serversToBuy} servers with ${ramAmount} ram. Confirm purchase?`)) {
+        ns.print("Purchase cancelled")
+        return
+    }
+
+    ns.print("purchase goes on")
+    
+    //ns.purchaseServer(`${ramAmount}playerSrv`, ramAmount)
     
 }
