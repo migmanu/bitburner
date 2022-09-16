@@ -30,8 +30,7 @@ export async function main(ns) {
         return
     }
 
-    ns.print("purchase goes on")
-    
-    //ns.purchaseServer(`${ramAmount}playerSrv`, ramAmount)
+    ns.purchaseServer(`${ramAmount}playerSrv`, ramAmount)
+    ns.print("Purchase made")
     
 }
